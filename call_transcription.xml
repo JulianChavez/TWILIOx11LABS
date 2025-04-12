@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say>This call will be recorded and transcribed. Please speak after the tone.</Say>
+    <Record 
+        action="/handle-recording" 
+        method="POST"
+        transcribe="true"
+        transcribeCallback="/handle-transcription"
+        maxLength="60"
+        playBeep="true"
+    />
+    <Say>Recording completed. Thank you for your message.</Say>
+</Response> 
