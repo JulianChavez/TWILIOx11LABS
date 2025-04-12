@@ -14,7 +14,9 @@ export async function POST(req) {
         const stream = twiml.start();
         stream.stream({
             url: `wss://${req.headers.get('host')}/api/stream/ws?callSid=${callSid}`,
-            track: 'inbound_track'
+            track: 'inbound_track',
+            statusCallback: `/api/stream/status?callSid=${callSid}`,
+            statusCallbackEvent: ['started', 'stopped', 'failed']
         });
         
         // Initial greeting

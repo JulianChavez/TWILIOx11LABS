@@ -106,11 +106,20 @@ export async function POST(req) {
                 )
             ]);
 
-            // Send audio through WebSocket
-            await sendAudioToCall(callSid, elevenLabsResponse.data);
+            console.log('ElevenLabs response received, sending audio to call:', callSid);
 
             // Create TwiML response for continuing the conversation
             const twiml = new VoiceResponse();
+            
+            // Start a new media stream to maintain WebSocket connection
+            const stream = twiml.start();
+            stream.stream({
+                url: `wss://${req.headers.get('host')}/api/stream/ws?callSid=${callSid}`,
+                track: 'inbound_track'
+            });
+
+            // Send audio through WebSocket after connection is established
+            await sendAudioToCall(callSid, elevenLabsResponse.data);
             
             // Continue the conversation
             twiml.record({
